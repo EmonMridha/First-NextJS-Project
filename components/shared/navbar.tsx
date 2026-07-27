@@ -32,16 +32,16 @@ export function Navbar() {
     return (
         <nav className="border-b border-border">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-16">
-                    <Link href='/' className="shrink-0">
+                <div className="flex items-center h-16">
+                    {/* Logo */}
+                    <Link href="/" className="shrink-0">
                         <span className="text-2xl font-bold text-primary">
                             NextJs
                         </span>
                     </Link>
 
                     {/* NavLinks */}
-
-                    <div className="hidden md:flex md:items-center md:gap-8">
+                    <div className="hidden md:flex flex-1 justify-center items-center gap-8">
                         {navItems.map((item) => (
                             <Link
                                 key={item.href}
@@ -56,20 +56,25 @@ export function Navbar() {
                     {/* User dropdown */}
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm" className="ml-auto">
+                            <div>
                                 <div className="w-9 h-8 rounded-full bg-primary/10 flex items-center justify-center">
                                     <User className="w-4 h-4 text-primary" />
                                 </div>
-                            </Button>
+                            </div>
                         </DropdownMenuTrigger>
+
                         <DropdownMenuContent align="end" className="w-56">
                             <DropdownMenuLabel className="font-normal">
                                 <div className="flex flex-col gap-1">
                                     <p className="text-sm font-medium">John Doe</p>
-                                    <p className="text-xs text-muted-foreground">abc@gmail.com</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        abc@gmail.com
+                                    </p>
                                 </div>
                             </DropdownMenuLabel>
+
                             <DropdownMenuSeparator />
+
                             {userMenuItems.map((item) => {
                                 const Icon = item.icon;
                                 return (
@@ -82,8 +87,12 @@ export function Navbar() {
                                     </DropdownMenuItem>
                                 );
                             })}
+
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => handleUserMenuAction("logout")}>
+
+                            <DropdownMenuItem
+                                onClick={() => handleUserMenuAction("logout")}
+                            >
                                 <LogOut className="w-4 h-4 mr-2" />
                                 <span>Log out</span>
                             </DropdownMenuItem>
@@ -91,6 +100,6 @@ export function Navbar() {
                     </DropdownMenu>
                 </div>
             </div>
-        </nav >
+        </nav>
     )
 }

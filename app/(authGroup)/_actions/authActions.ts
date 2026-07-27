@@ -15,8 +15,6 @@ type LoginState = {
 
 export const loginAction = async (prevState: LoginState, formData: FormData) => {
 
-    console.log(prevState, "previous state");
-
     const email = formData.get("email");
     const password = formData.get("password")
 
