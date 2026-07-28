@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Ghost, LogOut, Settings, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { LogOut, Settings, User } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -24,7 +23,35 @@ const userMenuItems = [
     { label: "Settings", icon: Settings, action: "settings" },
 ]
 
-export function Navbar() {
+type IUser = {
+    success: boolean,
+    message: string,
+    data: {
+        profile: {
+            id: string,
+            name: string,
+            email: string,
+            activeStatus: string,
+            role: string,
+            createdAt: string,
+            updatedAt: string,
+            profile: {
+                id: string,
+                profilePhoto: string,
+                bio: string | null,
+                userId: string,
+                createdAt: string,
+                updatedAt: string
+            }
+        }
+    }
+}
+
+type NavbarProps = {
+    user: IUser
+}
+
+export function Navbar({ user }: NavbarProps) {
     const handleUserMenuAction = (action: string) => {
         console.log(`User menu action: ${action}`);
     }
@@ -66,9 +93,9 @@ export function Navbar() {
                         <DropdownMenuContent align="end" className="w-56">
                             <DropdownMenuLabel className="font-normal">
                                 <div className="flex flex-col gap-1">
-                                    <p className="text-sm font-medium">John Doe</p>
+                                    <p className="text-sm font-medium">{user.data?.profile.name }</p>
                                     <p className="text-xs text-muted-foreground">
-                                        abc@gmail.com
+                                        {user.data?.profile.email}
                                     </p>
                                 </div>
                             </DropdownMenuLabel>
