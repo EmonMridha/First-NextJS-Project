@@ -10,6 +10,10 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { logout } from "@/service/logout";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { Button } from "../ui/button";
 
 const navItems = [
     { label: "Home", href: "/" },
@@ -17,7 +21,6 @@ const navItems = [
     { label: "Service", href: "/services" },
     { label: "Contact", href: "/contact" }
 ];
-
 const userMenuItems = [
     { label: "Profile", icon: User, action: "profile" },
     { label: "Settings", icon: Settings, action: "settings" },
@@ -46,14 +49,21 @@ type IUser = {
         }
     }
 }
-
 type NavbarProps = {
     user: IUser
 }
 
 export function Navbar({ user }: NavbarProps) {
-    const handleUserMenuAction = (action: string) => {
-        console.log(`User menu action: ${action}`);
+
+    const router = useRouter()
+
+    const handleUserMenuAction = async (action: string) => {
+
+        if (action === 'logout') {
+            await logout()
+            toast.success("User logged Out successfully");
+            router.push("/login")
+        }
     }
 
     return (
@@ -81,50 +91,55 @@ export function Navbar({ user }: NavbarProps) {
                     </div>
 
                     {/* User dropdown */}
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <div>
-                                <div className="w-9 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                                    <User className="w-4 h-4 text-primary" />
+                    {
+                        user.success ? <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <div>
+                                    <div className="w-9 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                                        <User className="w-4 h-4 text-primary" />
+                                    </div>
                                 </div>
-                            </div>
-                        </DropdownMenuTrigger>
+                            </DropdownMenuTrigger>
 
-                        <DropdownMenuContent align="end" className="w-56">
-                            <DropdownMenuLabel className="font-normal">
-                                <div className="flex flex-col gap-1">
-                                    <p className="text-sm font-medium">{user.data?.profile.name }</p>
-                                    <p className="text-xs text-muted-foreground">
-                                        {user.data?.profile.email}
-                                    </p>
-                                </div>
-                            </DropdownMenuLabel>
+                            <DropdownMenuContent align="end" className="w-56">
+                                <DropdownMenuLabel className="font-normal">
+                                    <div className="flex flex-col gap-1">
+                                        <p className="text-sm font-medium">{user.data?.profile.name}</p>
+                                        <p className="text-xs text-muted-foreground">
+                                            {user.data?.profile.email}
+                                        </p>
+                                    </div>
+                                </DropdownMenuLabel>
 
-                            <DropdownMenuSeparator />
+                                <DropdownMenuSeparator />
 
-                            {userMenuItems.map((item) => {
-                                const Icon = item.icon;
-                                return (
-                                    <DropdownMenuItem
-                                        key={item.action}
-                                        onClick={() => handleUserMenuAction(item.action)}
-                                    >
-                                        <Icon className="w-4 h-4 mr-2" />
-                                        <span>{item.label}</span>
-                                    </DropdownMenuItem>
-                                );
-                            })}
+                                {userMenuItems.map((item) => {
+                                    const Icon = item.icon;
+                                    return (
+                                        <DropdownMenuItem
+                                            key={item.action}
+                                            onClick={() => handleUserMenuAction(item.action)}
+                                        >
+                                            <Icon className="w-4 h-4 mr-2" />
+                                            <span>{item.label}</span>
+                                        </DropdownMenuItem>
+                                    );
+                                })}
 
-                            <DropdownMenuSeparator />
-
-                            <DropdownMenuItem
-                                onClick={() => handleUserMenuAction("logout")}
-                            >
-                                <LogOut className="w-4 h-4 mr-2" />
-                                <span>Log out</span>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                    onClick={async () => { await handleUserMenuAction("logout") }}
+                                >
+                                    <LogOut className="w-4 h-4 mr-2" />
+                                    <span>Log out</span>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu> : <Link href={'/login'}>
+                            <Button className="cursor-pointer">
+                                Login
+                            </Button>
+                        </Link>
+                    }
                 </div>
             </div>
         </nav>

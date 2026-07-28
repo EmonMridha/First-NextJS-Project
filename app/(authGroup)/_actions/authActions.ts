@@ -50,8 +50,6 @@ export const loginAction = async (prevState: LoginState, formData: FormData) => 
             sameSite: "lax"
         })
 
-        console.log(cookieStore.getAll());
-
         redirect("/dashboard", "replace")
     }
     return result
